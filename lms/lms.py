@@ -9,6 +9,7 @@ class Lms(object):
         self.password = None
         self.url = "Provide your own url"
         self.validation_image = "college_banner.png"
+        self.select_course = "select_course.png"
         
     def __str__(self):
         return self.lms_name        
@@ -43,7 +44,9 @@ class Lms(object):
         return self.url
     
     def get_validation_image(self):
-        return self.validation_image    
+        return self.validation_image
+    def get_select_course(self):
+        return self.select_course    
     
 class D2lDemo(Lms):
     def __init__(self, lms_name):

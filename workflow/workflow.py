@@ -16,6 +16,7 @@ class Workflow(object):
     def goto_lms(self):
         self.driver.goto_lms(self.browser.get_name(), self.lms.get_url(), self.lms.get_validation_image())
         
-        
+    def login(self):
+        self.driver.login(self.browser.get_name(), self.lms.get_user(), self.lms.get_password(), self.lms.get_select_course())    
         
     

@@ -1,4 +1,5 @@
 from sikuli import *
+from javax.imageio.spi import ImageWriterSpi
 
 project_location = os.path.dirname(getBundlePath())
 #images_app = os.path.join(project_location, "images", "app")
@@ -14,7 +15,12 @@ class Driver(object):
         self.screen = Screen(0)
         
     def open_browser(self, executable, name, image):
-        App.open(executable)
+        
+        brightspace = "http://www.brightspace.com/"
+        
+        to_open = executable + " " + brightspace
+        
+        App.open(to_open)
         
         if self.validate(self.screen, image):
             return self.get_browser_window(name)        
@@ -35,7 +41,18 @@ class Driver(object):
             return self.get_browser_window(name)        
         else:
             return None            
-                            
+
+    def login(self, name, user, password, image):
+        self.screen.write(user)
+        self.screen.write("#TAB.")
+        self.screen.write(password)
+        self.screen.write("#N.")
+        
+        if self.validate(self.screen, image):
+            return self.get_browser_window(name)        
+        else:
+            return None 
+                                 
     def get_browser_window(self, name):
         browser = App(name)
         browser_window = None
