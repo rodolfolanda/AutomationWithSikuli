@@ -2,17 +2,27 @@ from sikuli import *
 from javax.imageio.spi import ImageWriterSpi
 
 project_location = os.path.dirname(getBundlePath())
-#images_app = os.path.join(project_location, "images", "app")
+images_leap = os.path.join(project_location, "images", "leap")
 images_browser = os.path.join(project_location, "images", "browser")
 images_lms = os.path.join(project_location, "images", "lms")
 
 #addImagePath(images_app)
 addImagePath(images_browser)
 addImagePath(images_lms)
+addImagePath(images_leap)
 
 class Driver(object):
     def __init__(self):
         self.screen = Screen(0)
+
+    def open_lms_in_browser(self,executable, url, name, image): 
+        path = executable + " " + url        
+        App.open(path)
+        
+        if self.validate(self.screen, image, 0.50):
+            return self.get_browser_window(name)        
+        else:
+            return None  
         
     def open_browser(self, executable, name, image):
         
@@ -48,11 +58,48 @@ class Driver(object):
         self.screen.write(password)
         self.screen.write("#N.")
         
-        if self.validate(self.screen, image):
+        if self.validate(self.screen, image, 0.50):
             return self.get_browser_window(name)        
         else:
             return None 
-                                 
+
+    def logout(self, name, user_photo, logout):       
+        pattern_for_user = Pattern(user_photo)
+        pattern_for_logout = Pattern(logout)
+        
+        if self.screen.exists(pattern_for_user):
+            self.screen.getLastMatch().click()
+            
+            if self.screen.exists(pattern_for_logout):
+                self.screen.getLastMatch().click()
+        else:
+            print "Either image " + user_photo + " or " + logout + " was not found."      
+
+    def open_course(self, name, course_name, search_for_courses, content):
+        pattern_for_search = Pattern(search_for_courses).similar(0.50)
+        #pattern_for_content = Pattern(content)
+        
+        if self.screen.exists(pattern_for_search):
+            self.screen.getLastMatch().click()
+            self.screen.getLastMatch().write(course_name)
+            self.screen.getLastMatch().write("#N.")
+            
+            if self.validate(self.screen, content, 0.80):
+                if self.screen.exists(content):
+                    self.screen.getLastMatch().click()
+        else:
+            print "Either image " + search_for_courses + " or " + content + " was not found."   
+
+    def add_leap_activity(self, name, new_leap_name, add_activities, remote_plugin):
+        pattern_for_activities = Pattern(add_activities)
+        pattern_for_remote = Pattern(remote_plugin)
+        
+        if self.screen.exists(pattern_for_activities):
+            self.screen.getLastMatch().click()
+            
+            if self.screen.exists(pattern_for_remote):
+                self.screen.getLastMatch().click()
+                                      
     def get_browser_window(self, name):
         browser = App(name)
         browser_window = None
@@ -70,9 +117,13 @@ class Driver(object):
             break
         return browser_window
 
-    def validate(self, screen, image, time_out=10):
+    def validate(self, screen, image, similar=0.75, time_out=10):
+        #screen.focus()
+        screen.highlight(2)
+        
+        pattern = Pattern(image).similar(similar)
         for counter in range(1,time_out):
-            if not screen.exists(image):
+            if not screen.exists(pattern):
                 screen.wait(1)
             else:
                 screen.getLastMatch().highlight(2)

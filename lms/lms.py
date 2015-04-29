@@ -8,8 +8,14 @@ class Lms(object):
         self.user = None
         self.password = None
         self.url = "Provide your own url"
-        self.validation_image = "college_banner.png"
+        self.validation_image = "login.png"
         self.select_course = "select_course.png"
+        self.last_10_courses = "last_10_courses.png"
+        self.search_for_courses = "search_for_courses.png"
+        self.user_photo = "user_photo.png"
+        self.logout = "log_out.png"
+        self.content = "content.png"
+        self.add_activities = "add_activities.png"
         
     def __str__(self):
         return self.lms_name        
@@ -45,9 +51,28 @@ class Lms(object):
     
     def get_validation_image(self):
         return self.validation_image
+    
     def get_select_course(self):
         return self.select_course    
     
+    def get_last_10_courses(self):
+        return self.last_10_courses       
+
+    def get_search_for_courses(self):
+        return self.search_for_courses    
+
+    def get_user_photo(self):
+        return self.user_photo
+    
+    def get_logout(self):
+        return self.logout  
+    
+    def get_content(self):
+        return self.content      
+    
+    def get_add_activities(self):
+        return self.add_activities     
+                    
 class D2lDemo(Lms):
     def __init__(self, lms_name):
         Lms.__init__(self, lms_name)
